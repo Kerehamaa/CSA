@@ -40,6 +40,21 @@
         }
         #nextButton:hover {
             background-color: #0056b3;
+        } 
+		button {
+            position: fixed;
+            bottom: 20px;
+            right: 1150px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
         #result {
             margin-top: 20px;
@@ -80,6 +95,8 @@
 </head>
 <body>
     <h1>Caverna Scoring App</h1>
+
+<button onClick="window.location.reload();">Start Over</button>
 
     <!-- Questions -->
     <div id="questions">
