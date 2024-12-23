@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caverna Scoring App</title>
     <style>
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -16,8 +17,15 @@
             height: 100vh;
             background-color: #f4f4f9;
         }
+		
+		 p {
+            text-align: center;
+			color: #f4f4f9;
+			font-size: 2px;
+        }
         h1 {
             margin-bottom: 20px;
+			text-align: center;
         }
         .question {
             display: none;
@@ -117,6 +125,8 @@
 </head>
 <body>
     <h1>Caverna Scoring App</h1>
+	<p> By Kerehama Andrews </p>
+	<p> 1 - 1 - 1 - 1 - 18 - 18 - 14 - 13 - 21 - 7 </p>
 
 <button id="startButton" onClick="window.location.reload();">Start Over</button>
 
@@ -197,6 +207,7 @@
     <div id="log" class="log"></div>
 
     <script>
+	<!-- 1 - 1 - 1 - 1 - 18 - 18 - 14 - 13 - 21 - 7 -->
         let currentStep = 1;
         const totalSteps = 9;
         const log = [];
@@ -293,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
         firstInput.focus();
     }
 });
+<!-- 1 - 1 - 1 - 1 - 18 - 18 - 14 - 13 - 21 - 7 -->
     </script>
 </body>
 </html>
