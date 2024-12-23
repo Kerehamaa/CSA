@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caverna Scoring App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .question {
+            display: none;
+            text-align: center;
+        }
+        .question.active {
+            display: block;
+        }
+        #nextButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #nextButton:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .log {
+            margin-top: 20px;
+            font-family: monospace;
+            background-color: #eaeaea;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 600px;
+            overflow-x: auto;
+        }
+		#log {
+    display: none; /* Initially hide the log */
+    margin-top: 20px;
+    font-family: monospace;
+}
+
+        input[type="number"], input[type="checkbox"] {
+            margin: 10px 0;
+        }
+		.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px; /* Adds spacing between items */
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Adds space between checkbox and text */
+}
+
+    </style>
+</head>
+<body>
+    <h1>Caverna Scoring App</h1>
+
+    <!-- Questions -->
+    <div id="questions">
+        <!-- Step 1: Total Animals -->
+        <div class="question active" id="step1">
+            <label for="totalAnimals">Total Animals:</label><br>
+            <input type="number" id="totalAnimals" min="0" value="">
+        </div>
+
+        <!-- Step 2: Animal Types -->
+       <div class="question" id="step2">
+    <label>What types of Animals do you have?</label><br><br>
+    <div class="checkbox-group">
+        <label><input type="checkbox" id="sheep" unchecked> Sheep</label>
+        <label><input type="checkbox" id="donkey" unchecked> Donkey</label>
+        <label><input type="checkbox" id="pig" unchecked> Pig</label>
+        <label><input type="checkbox" id="cow" unchecked> Cow</label>
+    </div>
+</div>
+
+
+        <!-- Step 3: Grain -->
+        <div class="question" id="step3">
+            <label for="grain">Total Grain:</label><br>
+            <input type="number" id="grain" min="0" value="">
+        </div>
+
+        <!-- Step 4: Vegetables, Rubies, Dwarfs -->
+        <div class="question" id="step4">
+            <label for="vegetables">Vegetables:</label><br>
+            <input type="number" id="vegetables" min="0" value=""><br>
+            <label for="rubies">Rubies:</label><br>
+            <input type="number" id="rubies" min="0" value=""><br>
+            <label for="dwarfs">Dwarfs:</label><br>
+            <input type="number" id="dwarfs" min="0" value="">
+        </div>
+
+        <!-- Step 5: Unused Spaces -->
+        <div class="question" id="step5">
+            <label for="unusedSpaces">Unused Spaces:</label><br>
+            <input type="number" id="unusedSpaces" min="0" value="">
+        </div>
+
+        <!-- Step 6: Furnishing Tiles, Pastures, Mines -->
+        <div class="question" id="step6">
+            <label for="furnishings">Gold from Furnishings, Pastures, Mines:</label><br>
+            <input type="number" id="furnishings" min="0" value="">
+        </div>
+
+        <!-- Step 7: Special Gold -->
+        <div class="question" id="step7">
+            <label for="specialGold">Special Gold (Storages/Chambers):</label><br>
+            <input type="number" id="specialGold" min="0" value="">
+        </div>
+
+        <!-- Step 8: Gold Coins -->
+        <div class="question" id="step8">
+            <label for="goldCoins">Gold Coins:</label><br>
+            <input type="number" id="goldCoins" min="0" value="">
+        </div>
+
+        <!-- Step 9: Begging Markers -->
+        <div class="question" id="step9">
+            <label for="beggingMarkers">Begging Markers:</label><br>
+            <input type="number" id="beggingMarkers" min="0" value="">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <button id="nextButton" onclick="nextQuestion()">Next</button>
+
+    <!-- Result -->
+    <div id="result"></div>
+
+    <!-- Log -->
+    <div id="log" class="log"></div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 9;
+        const log = [];
+        let totalScore = 0;
+
+      function nextQuestion() {
+    const currentQuestion = document.getElementById(`step${currentStep}`);
+    const inputs = currentQuestion.querySelectorAll('input');
+
+    // Save step result
+    if (currentStep === 1) {
+        const totalAnimals = parseInt(inputs[0].value) || 0;
+        totalScore += totalAnimals;
+        log.push(`Total Animals = ${totalAnimals} Gold`);
+    } else if (currentStep === 2) {
+        let penalty = 0;
+        inputs.forEach((checkbox) => {
+            if (!checkbox.checked) penalty -= 2;
+        });
+        totalScore += penalty;
+        log.push(`Animal Penalty = ${penalty} Gold`);
+    } else if (currentStep === 3) {
+        const grain = parseInt(inputs[0].value) || 0;
+        const grainGold = Math.ceil(grain / 2);
+        totalScore += grainGold;
+        log.push(`Grain = ${grainGold} Gold`);
+    } else if (currentStep === 4) {
+        const vegetables = parseInt(inputs[0].value) || 0;
+        const rubies = parseInt(inputs[1].value) || 0;
+        const dwarfs = parseInt(inputs[2].value) || 0;
+        const total = vegetables + rubies + dwarfs;
+        totalScore += total;
+        log.push(`Vegetables, Rubies, Dwarfs = ${total} Gold`);
+    } else if (currentStep === 5) {
+        const unusedSpaces = parseInt(inputs[0].value) || 0;
+        const penalty = unusedSpaces * -2;
+        totalScore += penalty;
+        log.push(`Unused Spaces Penalty = ${penalty} Gold`);
+    } else if (currentStep === 6) {
+        const furnishings = parseInt(inputs[0].value) || 0;
+        totalScore += furnishings;
+        log.push(`Furnishings = ${furnishings} Gold`);
+    } else if (currentStep === 7) {
+        const specialGold = parseInt(inputs[0].value) || 0;
+        totalScore += specialGold;
+        log.push(`Special Gold = ${specialGold} Gold`);
+    } else if (currentStep === 8) {
+        const goldCoins = parseInt(inputs[0].value) || 0;
+        totalScore += goldCoins;
+        log.push(`Gold Coins = ${goldCoins} Gold`);
+    } else if (currentStep === 9) {
+        const beggingMarkers = parseInt(inputs[0].value) || 0;
+        const penalty = beggingMarkers * -3;
+        totalScore += penalty;
+        log.push(`Begging Markers Penalty = ${penalty} Gold`);
+    }
+
+    // Move to the next question
+    currentQuestion.classList.remove('active');
+    currentStep++;
+    if (currentStep <= totalSteps) {
+        const nextQuestion = document.getElementById(`step${currentStep}`);
+        nextQuestion.classList.add('active');
+        
+        // Automatically focus on the first input in the next question
+        const nextInput = nextQuestion.querySelector('input');
+        if (nextInput) nextInput.focus();
+    } else {
+        showResults();
+    }
+}
+
+
+       function showResults() {
+    document.getElementById('nextButton').style.display = 'none';
+    document.getElementById('result').textContent = `Total Score: ${totalScore} Gold`;
+    
+    const logElement = document.getElementById('log');
+    logElement.style.display = 'block'; // Show the log
+    logElement.innerHTML = log.join('<br>');
+}
+
+
+        // Add keyboard event listener for "Enter" key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                nextQuestion();
+            }
+        });
+		// Automatically focus the first input on page load
+document.addEventListener("DOMContentLoaded", () => {
+    const firstInput = document.querySelector("#step1 input");
+    if (firstInput) {
+        firstInput.focus();
+    }
+});
+    </script>
+</body>
+</html>
